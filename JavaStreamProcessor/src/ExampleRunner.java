@@ -7,8 +7,6 @@ public class ExampleRunner {
     private static final String TEXT_TESTHTTP = "http://www.google.com/";
     private static final String TEXT_TESTFILE1 = "twl.utf8.txt";
     private static final String TEXT_TESTFILE2 = "csw.utf8.txt";
-    private static long totalTime = 0;
-    public static boolean done = false;
 
     /**
      * @param args
@@ -16,10 +14,11 @@ public class ExampleRunner {
     public static void main(String[] args) {
 
 	// Uncomment the example to run
+
 	// example_test_url_file();
 	// example_test_url_http();
-	// example_temperature();
 	example_streamsearch();
+
     }
 
     public static void example_streamsearch() {

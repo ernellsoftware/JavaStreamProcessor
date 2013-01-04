@@ -50,13 +50,15 @@ public class StreamSearchExample {
 
 	    // config
 	    ProcessorConfiguration ipc0 = new ProcessorConfiguration(urls[0]);
-	    ipc0.max_length = 4;
-	    ipc0.min_length = 2;
+	    ipc0.max_length = 5;
+	    ipc0.min_length = 3;
+	    ipc0.buffer_size = 16;// max length of lines in this file
 	    ipc0.unique = false;
 
 	    ProcessorConfiguration ipc1 = new ProcessorConfiguration(urls[1]);
-	    ipc1.max_length = 4;
-	    ipc1.min_length = 2;
+	    ipc1.max_length = 5;
+	    ipc1.min_length = 3;
+	    ipc1.buffer_size = 16;// max length of lines in this file
 	    ipc1.unique = true;
 
 	    // filter 1
@@ -77,8 +79,8 @@ public class StreamSearchExample {
 	    cpus[1].addFilter(filter1);
 	    cpus[1].addFilter(filter2);
 
-	    startStreamProcessorThread(cpus,
-		    "2 files read sequentially in a thread");
+	    startStreamProcessorThread(cpus, cpus.length
+		    + " files read sequentially.");
 
 	    // wait for thread to finish
 	    while (!done) {

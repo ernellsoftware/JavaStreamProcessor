@@ -27,9 +27,6 @@ import java.net.URL;
 public abstract class ProcessorBaseConfiguration implements
 	IProcessorConfiguration {
 
-    /** the size of the longest line in the stream */
-    public int max_possible_linelength;
-
     /** if length min/max of line is to be used */
     public boolean use_length_settings;
 
@@ -45,6 +42,9 @@ public abstract class ProcessorBaseConfiguration implements
 
     /** url of the url/stream/file */
     public URL stream_url;
+
+    /** the size of the longest line expected to find in the stream */
+    public int buffer_size;
 
     /** show a # after the line */
     public boolean unique;
@@ -70,7 +70,7 @@ public abstract class ProcessorBaseConfiguration implements
     public void setDefaults() {
 	// set some defaults
 	stream_name = "no_name_stream";
-	max_possible_linelength = 16;
+	buffer_size = 1024;
 	use_length_settings = false;
 	min_length = 0;
 	max_length = 16;
