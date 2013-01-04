@@ -1,6 +1,21 @@
+# Eclipse specific settings
+
+.classpath
+.project
+.settings
+
+# Binaries
+
+bin/
+gen/
+build/
+out/
+target
 *.class
+pom.xml.releaseBackup
+release.properties
 
 # Package Files #
-*.jar
+# *.jar
 *.war
 *.ear
