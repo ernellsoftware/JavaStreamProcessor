@@ -17,12 +17,37 @@ package se.ernell.java.streamprocessor.filters;
  */
 import com.eaio.stringsearch.BNDMWildcardsCI;
 
+/**
+ * <p>
+ * <b>Filterclass: Contains</b><br>
+ * Check if a line 'contains' the given pattern.<br>
+ * Use '?' as wildcard.<br>
+ * This class is using the StringSearch-2 library by Johann Burkard.
+ * </p>
+ * <b>Example of patterns:</b>
+ * 
+ * <pre>
+ * 	A
+ * 	A?S
+ * 	ABC?E?F
+ * </pre>
+ * 
+ * @see se.ernell.java.streamprocessor.filters.IFilter
+ * @see se.ernell.java.streamprocessor.filters.BaseFilter
+ * @author Robert Andersson <rob@ernell.se> <http://www.ernell.se>
+ */
 public class FilterContains extends BaseFilter {
 
+    /** StringSearch-2 object */
     private BNDMWildcardsCI bndm;
+
+    /** StringSearch-2 pattern */
     private char[] bndm_pattern;
+
+    /** StringSearch-2 compiled pattern */
     private Object compiledpattern;
 
+    /** Constructor */
     public FilterContains(String arg_pattern, int arg_length) {
 	super(arg_pattern, arg_length);
 
@@ -35,6 +60,7 @@ public class FilterContains extends BaseFilter {
 
     }
 
+    /** @inheritDoc */
     @Override
     public boolean match(char[] line, int line_length) {
 	int patternPos = bndm.searchChars(line, bndm_pattern, compiledpattern);
@@ -47,6 +73,7 @@ public class FilterContains extends BaseFilter {
 	return false;
     }
 
+    /** needed function */
     private final static boolean isContained(int patternPos, int patternPosMax) {
 	return patternPos <= patternPosMax;
     }

@@ -15,8 +15,10 @@ package se.ernell.java.streamprocessor.filters;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 public interface IFilter {
 
+    /** Matching function */
     public boolean match(char[] line, int line_length);
 
 }
