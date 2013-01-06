@@ -6,7 +6,7 @@ Read a stream with an highly speed optimized reader and apply
 multiple search filters like 'begins with', 'ends with', 'contains'.
 The filters are sequentially executed, so if 2 filters are used, the 
 second filter gives a subset of the first filter result.
-Checkout ExampleRunner.java + StreamSearchExample.java
+Checkout ExampleRunner.java + StreamSearchExample.java<br>
 <i>Note: the library is not yet finished</i>
 
 ### package se.ernell.java.OptmizedInputStreamReader
