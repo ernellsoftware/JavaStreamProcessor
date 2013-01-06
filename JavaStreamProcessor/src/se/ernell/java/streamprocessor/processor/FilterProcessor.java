@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import se.ernell.java.streamprocessor.config.IProcessorConfiguration;
 import se.ernell.java.streamprocessor.filters.IFilter;
-import se.ernell.java.streamprocessor.objects.IStreamObject;
+import se.ernell.java.streamprocessor.io.IStreamObject;
 
 /**
  * Extended Processor class with filtering option

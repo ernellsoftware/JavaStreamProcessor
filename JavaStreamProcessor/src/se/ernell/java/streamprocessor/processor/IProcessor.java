@@ -30,6 +30,6 @@ public interface IProcessor {
     /** method to add a custom filter. used by extended classes */
     public void addFilter(IFilter arg_filter);
 
-    public void start();
+    public boolean start();
 
 }

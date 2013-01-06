@@ -35,7 +35,6 @@ public class ProcessorConfigurationAndroid extends ProcessorBaseConfiguration {
 	// Use a mock for now
 	// Later get values from SharedPreferences
 
-	use_length_settings = true;
 	min_length = 0;
 	max_length = 16;
 	show_score = true;

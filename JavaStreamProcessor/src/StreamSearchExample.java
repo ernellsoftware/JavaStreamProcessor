@@ -2,11 +2,14 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
+import se.ernell.java.streamprocessor.comparators.AlphaDescendingComparator;
 import se.ernell.java.streamprocessor.config.ProcessorConfiguration;
-import se.ernell.java.streamprocessor.filters.FilterContains;
+import se.ernell.java.streamprocessor.filters.FilterBuild;
 import se.ernell.java.streamprocessor.filters.IFilter;
-import se.ernell.java.streamprocessor.objects.IStreamObject;
+import se.ernell.java.streamprocessor.io.IStreamObject;
 import se.ernell.java.streamprocessor.objects.Word;
 import se.ernell.java.streamprocessor.processor.BaseProcessor;
 import se.ernell.java.streamprocessor.processor.FilterProcessor;
@@ -27,10 +30,10 @@ public class StreamSearchExample {
     public static boolean done = false;
 
     public StreamSearchExample() {
-	runStreamProcessor();
+	run();
     }
 
-    public void runStreamProcessor() {
+    private void run() {
 
 	myList = new ArrayList<IStreamObject>(512);
 
@@ -48,36 +51,37 @@ public class StreamSearchExample {
 	    urls[0] = files[0].toURI().toURL();
 	    urls[1] = files[1].toURI().toURL();
 
-	    // config
+	    // filter 1
+	    String word1 = "ASSE";
+	    IFilter filter1 = new FilterBuild(word1, word1.length());
+	    // filter 2
+	    // String word2 = "J";
+	    // IFilter filter2 = new FilterContains(word2, word2.length());
+
+	    // File 1 Processor
 	    ProcessorConfiguration ipc0 = new ProcessorConfiguration(urls[0]);
-	    ipc0.max_length = 5;
-	    ipc0.min_length = 3;
+	    ipc0.min_length = 0;
+	    ipc0.max_length = 16;
 	    ipc0.buffer_size = 16;// max length of lines in this file
 	    ipc0.unique = false;
 
+	    // File 2 Processor
 	    ProcessorConfiguration ipc1 = new ProcessorConfiguration(urls[1]);
-	    ipc1.max_length = 5;
-	    ipc1.min_length = 3;
+	    ipc1.min_length = 0;
+	    ipc1.max_length = 16;
 	    ipc1.buffer_size = 16;// max length of lines in this file
 	    ipc1.unique = true;
-
-	    // filter 1
-	    String word1 = "AS";
-	    IFilter filter1 = new FilterContains(word1, word1.length());
-	    // filter 2
-	    String word2 = "J";
-	    IFilter filter2 = new FilterContains(word2, word2.length());
 
 	    // processor
 	    IProcessor[] cpus = new FilterProcessor[2];
 
 	    cpus[0] = new FilterProcessor(ipc0, myList);
 	    cpus[0].addFilter(filter1);
-	    cpus[0].addFilter(filter2);
+	    // cpus[0].addFilter(filter2);
 
 	    cpus[1] = new FilterProcessor(ipc1, myList);
 	    cpus[1].addFilter(filter1);
-	    cpus[1].addFilter(filter2);
+	    // cpus[1].addFilter(filter2);
 
 	    startStreamProcessorThread(cpus, cpus.length
 		    + " files read sequentially.");
@@ -105,7 +109,7 @@ public class StreamSearchExample {
 		if (size > 0) {
 		    for (int i = 0; i < size; i++) {
 			System.out.println("[" + i + "] = '"
-				+ ((Word) BaseProcessor.arraylist.get(i)).word
+				+ ((Word) BaseProcessor.arraylist.get(i)).line
 				+ "'");
 		    }
 		}
@@ -130,7 +134,11 @@ public class StreamSearchExample {
 		SimpleTimer time = new SimpleTimer();
 		time.start();
 		for (int i = 0; i < cpus.length; i++) {
-		    cpus[i].start();
+		    if (!cpus[i].start()) {
+			System.out.println("Processor Thread " + i + " [FAIL]");
+		    } else {
+			System.out.println("Processor Thread " + i + " [OK]");
+		    }
 		}
 		time.stop(name);
 		totalTime += time.getTime();

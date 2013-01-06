@@ -1,10 +1,7 @@
 package se.ernell.java.streamprocessor.config;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 /*
- * Copyright (C) 2012 Robert Andersson <http://www.ernell.se>
+ * Copyright (C) 2013 Robert Andersson <http://www.ernell.se>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +15,8 @@ import java.net.URL;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Class describing a configuration for searching
@@ -28,7 +27,7 @@ public abstract class ProcessorBaseConfiguration implements
 	IProcessorConfiguration {
 
     /** if length min/max of line is to be used */
-    public boolean use_length_settings;
+    // public boolean use_length_settings;
 
     /** line min/max length */
     public int min_length;
@@ -43,8 +42,11 @@ public abstract class ProcessorBaseConfiguration implements
     /** url of the url/stream/file */
     public URL stream_url;
 
-    /** the size of the longest line expected to find in the stream */
+    /** the size of the streamreader buffer. default=8192 (bytes) */
     public int buffer_size;
+
+    /** the size of the longest line expected to find in the stream */
+    public int char_buffer_size;
 
     /** show a # after the line */
     public boolean unique;
@@ -58,128 +60,101 @@ public abstract class ProcessorBaseConfiguration implements
     /** upper/lower case fonts */
     public boolean font_case;
 
+    /** Constructor */
     public ProcessorBaseConfiguration(URL arg_url) {
 	stream_url = arg_url;
 	setDefaults();
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public void setDefaults() {
-	// set some defaults
+
+	// set default values
+	buffer_size = 8192;
+	char_buffer_size = 1024;
 	stream_name = "no_name_stream";
-	buffer_size = 1024;
-	use_length_settings = false;
+	// use_length_settings = false;
 	min_length = 0;
 	max_length = 16;
 	show_score = false;
 	font_case = false;
 	unique = false;
 	use_colors = false;
+
     };
 
-    /**
-     * @param use_length_settings
-     *            the use_length_settings to set
-     */
-    public void setUseLengthSettings(boolean use_length_settings) {
-	this.use_length_settings = use_length_settings;
-    }
+    // @Deprecated
+    // public void setUseLengthSettings(boolean flag) {
+    // use_length_settings = flag;
+    // }
 
-    /**
-     * @param min_length
-     *            the min_length to set
-     */
+    /** @inheritDoc */
+    @Override
     public void setMinLength(int min_length) {
 	this.min_length = min_length;
     }
 
-    /**
-     * @param max_length
-     *            the max_length to set
-     */
+    /** @inheritDoc */
+    @Override
     public void setMaxLength(int max_length) {
 	this.max_length = max_length;
     }
 
-    /**
-     * @return the min_length
-     */
+    /** @inheritDoc */
     @Override
-    public int getMin_length() {
+    public int getMinLength() {
 	return min_length;
     }
 
-    /**
-     * @return the max_length
-     */
+    /** @inheritDoc */
     @Override
-    public int getMax_length() {
+    public int getBufferSize() {
+	return buffer_size;
+    }
+
+    /** @inheritDoc */
+    @Override
+    public int getCharBufferSize() {
+	return char_buffer_size;
+    }
+
+    /** @inheritDoc */
+    @Override
+    public int getMaxLength() {
 	return max_length;
     }
 
-    /**
-     * @param max_list_size
-     *            the max_list_size to set
-     */
+    /** @inheritDoc */
+    @Override
     public void setMaxListSize(int max_list_size) {
 	this.max_list_size = max_list_size;
     }
 
-    /**
-     * @param stream_name
-     *            the stream_name
-     */
+    /** @inheritDoc */
+    @Override
     public void setStreamName(String stream_name) {
 	this.stream_name = stream_name;
     }
 
-    /**
-     * @param stream_url
-     *            the stream URL
-     */
-    public void setStreamUrl(URL stream_url) {
-	this.stream_url = stream_url;
-    }
-
-    /**
-     * @return the stream_url
-     */
+    /** @inheritDoc */
     @Override
-    public URL getStream_url() {
+    public URL getStreamURL() {
 	return stream_url;
     }
 
-    /**
-     * @param unique
-     *            the unique to set
-     */
-    public void setUnique(boolean unique) {
-	this.unique = unique;
+    public void setUnique(boolean flag) {
+	unique = flag;
     }
 
-    /**
-     * @param show_score
-     *            the show_score to set
-     */
     public void setShowScore(boolean show_score) {
 	this.show_score = show_score;
     }
 
-    /**
-     * @param use_colors
-     *            the use_colors to set
-     */
     public void setUseColors(boolean use_colors) {
 	this.use_colors = use_colors;
     }
 
-    /**
-     * @param font_case
-     *            the font_case to set
-     */
     public void setFontCase(boolean font_case) {
 	this.font_case = font_case;
     }

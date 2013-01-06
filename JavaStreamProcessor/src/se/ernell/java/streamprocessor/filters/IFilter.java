@@ -16,6 +16,13 @@ package se.ernell.java.streamprocessor.filters;
  * limitations under the License.
  */
 
+/**
+ * Interface: IFilter<br>
+ * Common behaviour of all filters.<br>
+ * 
+ * @author rob@ernell.se
+ * 
+ */
 public interface IFilter {
 
     /** Matching function */

@@ -1,9 +1,7 @@
 package se.ernell.java.streamprocessor.config;
 
-import java.net.URL;
-
 /*
- * Copyright (C) 2012 Robert Andersson <http://www.ernell.se>
+ * Copyright (C) 2013 Robert Andersson <http://www.ernell.se>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +15,7 @@ import java.net.URL;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.net.URL;
 
 /**
  * Class for a search config with manual settings
@@ -27,6 +26,8 @@ public class ProcessorConfiguration extends ProcessorBaseConfiguration {
 
     public ProcessorConfiguration(URL arg_url) {
 	super(arg_url);
+	setDefaults();
+
     }
 
     /**

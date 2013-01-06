@@ -1,4 +1,5 @@
-package se.ernell.java.streamprocessor.objects;
+package se.ernell.java.streamprocessor.io;
+
 /*
  * Copyright (C) 2013 Robert Andersson <http://www.ernell.se>
  *
@@ -16,10 +17,9 @@ package se.ernell.java.streamprocessor.objects;
  */
 
 /**
- * Implement this interface to your class.
- * Pass the object when calling the reader.
- * The object's put(...) method will be called
- * from the reader for each new textline found.
+ * Implement this interface to your class. Pass the object when calling the
+ * reader. The object's put(...) method will be called from the reader for each
+ * new textline found.
  */
 public interface IStreamObject {
 

@@ -15,59 +15,35 @@ package se.ernell.java.streamprocessor.filters;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.eaio.stringsearch.BNDMWildcardsCI;
 
 /**
  * <p>
- * <b>Filterclass: Contains</b><br>
- * Check if a line 'contains' the given pattern.<br>
- * Use '?' as wildcard.<br>
- * This class is using the StringSearch-2 library by Johann Burkard.
+ * <b>Filterclass: FilterAnagram</b><br>
+ * Check if a line is an anagram or subanagram of the given pattern.<br>
+ * - An Anagram is always same length as the pattern.<br>
+ * - A Subanagram is always shorter than the pattern.<br>
+ * - A 'Build' is the Anagrams + Subanagrams (same length or less than pattern)<br>
  * </p>
- * <b>Example of patterns:</b>
  * 
- * <pre>
- * 	A
- * 	A?S
- * 	ABC?E?F
- * </pre>
- * 
- * @see se.ernell.java.streamprocessor.filters.IFilter
- * @see se.ernell.java.streamprocessor.filters.BaseFilter
+ * @see se.ernell.java.streamprocessor.filters.FilterAnagram
+ * @see se.ernell.java.streamprocessor.filters.FilterSubAnagram
+ * @see se.ernell.java.streamprocessor.filters.FilterBuild
  * @author Robert Andersson <rob@ernell.se> <http://www.ernell.se>
  */
-public class FilterAnagram extends BaseFilter {
+public class FilterAnagram extends BaseFilterAnagram {
 
-    /** StringSearch-2 object */
-    private BNDMWildcardsCI bndm;
-
-    /** StringSearch-2 pattern */
-    private char[] bndm_pattern;
-
-    /** StringSearch-2 compiled pattern */
-    private Object compiledpattern;
-
-    /** Constructor */
     public FilterAnagram(String arg_pattern, int arg_length) {
 	super(arg_pattern, arg_length);
-
-	// StringSearch object
-	bndm = new BNDMWildcardsCI('?');
-	bndm_pattern = new char[arg_length];
-	for (int i = 0; i < arg_length; i++)
-	    bndm_pattern[i] = pattern.charAt(i);
-	compiledpattern = bndm.processChars(bndm_pattern);
-
     }
 
-    /** @inheritDoc */
     @Override
     public boolean match(char[] line, int line_length) {
 
-	// check if anagram
-
-	// no match
+	if (line_length == pattern_length) {
+	    return super.match(line, line_length);
+	}
 	return false;
+
     }
 
 }

@@ -1,7 +1,5 @@
 package se.ernell.java.streamprocessor.config;
 
-import java.net.URL;
-
 /*
  * Copyright (C) 2013 Robert Andersson <http://www.ernell.se>
  *
@@ -17,16 +15,36 @@ import java.net.URL;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.net.URL;
 
 public interface IProcessorConfiguration {
 
     /** Set default values for the configuration */
     public void setDefaults();
 
-    public URL getStream_url();
+    /** return the URL of the stream */
+    public URL getStreamURL();
 
-    public int getMin_length();
+    /** return minimum length of lines to find */
+    public int getMinLength();
 
-    public int getMax_length();
+    /** set minimum length of lines to find */
+    public void setMinLength(int min_length);
+
+    /** return maximum length of lines to find */
+    public int getMaxLength();
+
+    /** set maximum length of lines to find */
+    public void setMaxLength(int max_length);
+
+    /** return size of the streamreader char-buffer where a line must fit */
+    public int getCharBufferSize();
+
+    /** return size of the streamreader buffer */
+    public int getBufferSize();
+
+    public void setMaxListSize(int max_list_size);
+
+    public void setStreamName(String stream_name);
 
 }

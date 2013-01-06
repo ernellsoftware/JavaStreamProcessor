@@ -22,8 +22,8 @@ import java.util.ArrayList;
 
 import se.ernell.java.streamprocessor.config.IProcessorConfiguration;
 import se.ernell.java.streamprocessor.filters.IFilter;
+import se.ernell.java.streamprocessor.io.IStreamObject;
 import se.ernell.java.streamprocessor.io.InputStreamReader;
-import se.ernell.java.streamprocessor.objects.IStreamObject;
 import se.ernell.java.streamprocessor.objects.Word;
 
 /**
@@ -80,20 +80,25 @@ public abstract class BaseProcessor implements IProcessor,
      * class implements the IStreamObjectRecievable interface
      */
     @Override
-    public void start() {
+    public boolean start() {
 	try {
 	    // open stream from URL stored in the IProcessorConfiguration object
-	    final InputStream is = ipc.getStream_url().openStream();
+	    final InputStream is = ipc.getStreamURL().openStream();
+	    // final InputStreamReader.InputStreamReaderAction isr = new
+	    // InputStreamReader.InputStreamReaderAction(
+	    // this);
 	    final InputStreamReader isr = new InputStreamReader(this);
-	    isr.setRestricted_min_length(ipc.getMin_length());
-	    isr.setRestricted_max_length(ipc.getMax_length());
-	    isr.readLinesFromStream(is, 16, 16384);
+	    isr.setRestrictedMinLength(ipc.getMinLength());
+	    isr.setRestrictedMaxLength(ipc.getMaxLength());
+	    isr.readLinesFromStream(is, ipc.getCharBufferSize(),
+		    ipc.getBufferSize());
 	    is.close();
+	    return true;
 	} catch (IOException e) {
 	    // System.out.println("IOException!");
 	    e.printStackTrace();
+	    return false;
 	}
-
     }
 
     /**

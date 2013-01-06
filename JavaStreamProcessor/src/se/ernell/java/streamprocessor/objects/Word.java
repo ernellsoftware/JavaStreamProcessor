@@ -1,16 +1,14 @@
 package se.ernell.java.streamprocessor.objects;
 
+import se.ernell.java.streamprocessor.io.IStreamObject;
+import se.ernell.java.streamprocessor.utils.WordUtilities;
+
 public class Word implements IStreamObject {
 
-    // Final Constants
-    private final static int INDEX_VOWELS = 0;
-    private final static int INDEX_CONSONANTS = 1;
+    /** string representing a line */
+    public final String line;
 
-    // Word data
-    /** string representing a word */
-    public final String word;
-
-    /** length of the word */
+    /** length of the line */
     public final int length;
 
     /** integer score in a wordgame such as Scrabble or Wordfeud */
@@ -24,61 +22,6 @@ public class Word implements IStreamObject {
 
     /** probability of a word. implemented later */
     // public final int word_probability;
-
-    /**
-     * Count Vowels & Consonants
-     * 
-     * @param arg_word
-     *            Word to count
-     * @return int[]: index 0 = number of vowels; index 1 = number of consonants
-     */
-    private final static int[] getVowCons(String arg_word) {
-
-	int len = arg_word.length();
-	int answer[] = { 0, 0 };
-	for (int i = 0; i < len; i++) {
-	    char c = arg_word.charAt(i);
-
-	    if (c == 'E' || c == 'A' || c == 'I' || c == 'O' || c == 'U')
-		answer[INDEX_VOWELS]++;
-	    else if (c == 'N' || c == 'R' || c == 'T' || c == 'L' || c == 'S'
-		    || c == 'D' || c == 'G' || c == 'B' || c == 'C' || c == 'M'
-		    || c == 'P' || c == 'F' || c == 'H' || c == 'V' || c == 'W'
-		    || c == 'Y' || c == 'K' || c == 'J' || c == 'X' || c == 'Q'
-		    || c == 'Z')
-		answer[INDEX_CONSONANTS]++;
-
-	}
-	return answer;
-    }
-
-    /**
-     * Count Vowels & Consonants
-     * 
-     * @param arg_word
-     *            Word to count
-     * @param len
-     *            Length of arg_word
-     * @return int[]: index 0 = number of vowels; index 1 = number of consonants
-     */
-    private final static int[] getVowCons(char[] arg_word, int len) {
-
-	int answer[] = { 0, 0 };
-	for (int i = 0; i < len; i++) {
-	    char c = arg_word[i];
-
-	    if (c == 'E' || c == 'A' || c == 'I' || c == 'O' || c == 'U')
-		answer[INDEX_VOWELS]++;
-	    else if (c == 'N' || c == 'R' || c == 'T' || c == 'L' || c == 'S'
-		    || c == 'D' || c == 'G' || c == 'B' || c == 'C' || c == 'M'
-		    || c == 'P' || c == 'F' || c == 'H' || c == 'V' || c == 'W'
-		    || c == 'Y' || c == 'K' || c == 'J' || c == 'X' || c == 'Q'
-		    || c == 'Z')
-		answer[INDEX_CONSONANTS]++;
-
-	}
-	return answer;
-    }
 
     /**
      * Static factory methods returns an object of this class.
@@ -104,50 +47,49 @@ public class Word implements IStreamObject {
 	return new Word(arg_word);
     }
 
-    private Word(String arg_word, int arg_score) {
-	word = arg_word;
+    public Word(String arg_word, int arg_score) {
+	line = arg_word;
+	length = arg_word.length();
 	score = arg_score;
-	length = (byte) arg_word.length();
 	unique = false;
-	vowcons = getVowCons(arg_word);
+	vowcons = WordUtilities.getVowCons(arg_word);
     }
 
-    private Word(String arg_word, int arg_score, boolean arg_unique) {
-	word = arg_word;
+    public Word(String arg_word, int arg_score, boolean arg_unique) {
+	line = arg_word;
+	length = arg_word.length();
 	score = arg_score;
-	length = (byte) arg_word.length();
 	unique = arg_unique;
-	vowcons = getVowCons(arg_word);
+	vowcons = WordUtilities.getVowCons(arg_word);
     }
 
     // + experimental
-    private Word(char[] arg_word, int arg_score, int len, boolean arg_unique) {
-	word = new String(arg_word);// .toString();// + experimental, no trim.
-				    // does not work.
+    public Word(char[] arg_word, int arg_score, int len, boolean arg_unique) {
+	line = new String(arg_word).trim();
+	length = arg_word.length;
 	score = arg_score;
-	length = len;
 	unique = arg_unique;
-	vowcons = getVowCons(arg_word, len);
+	vowcons = WordUtilities.getVowCons(arg_word, len);
     }
 
-    private Word(StringBuilder arg_word, int arg_score, boolean arg_unique) {
-	word = arg_word.toString();
+    public Word(StringBuilder arg_word, int arg_score, boolean arg_unique) {
+	line = arg_word.toString();
+	length = arg_word.length();
 	score = arg_score;
-	length = (byte) arg_word.length();
 	unique = arg_unique;
-	vowcons = getVowCons(arg_word.toString());
+	vowcons = WordUtilities.getVowCons(arg_word.toString());
     }
 
-    private Word(String arg_word) {
-	word = arg_word;
+    public Word(String arg_word) {
+	line = arg_word;
+	length = arg_word.length();
 	score = 0;
-	length = (byte) arg_word.length();
 	unique = false;
-	vowcons = getVowCons(arg_word);
+	vowcons = WordUtilities.getVowCons(arg_word);
     }
 
-    public String getWord() {
-	return word;
+    public int[] getWovCons() {
+	return vowcons;
     }
 
     public int getScore() {
@@ -156,6 +98,14 @@ public class Word implements IStreamObject {
 
     public String getScoreString() {
 	return String.valueOf(score);
+    }
+
+    public String getWord() {
+	return line;
+    }
+
+    public int getLength() {
+	return length;
     }
 
 }
