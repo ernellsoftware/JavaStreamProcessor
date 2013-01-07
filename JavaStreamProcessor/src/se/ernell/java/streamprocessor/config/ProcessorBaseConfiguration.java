@@ -15,8 +15,12 @@ package se.ernell.java.streamprocessor.config;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import se.ernell.java.streamprocessor.Score;
+import se.ernell.java.streamprocessor.Score.Game;
 
 /**
  * Class describing a configuration for searching
@@ -60,6 +64,10 @@ public abstract class ProcessorBaseConfiguration implements
     /** upper/lower case fonts */
     public boolean font_case;
 
+    /** Type of wordgame ( Score.Game.<GAME> ) */
+    public Score.Game game;
+    public static Score score_object;
+
     /** Constructor */
     public ProcessorBaseConfiguration(URL arg_url) {
 	stream_url = arg_url;
@@ -82,12 +90,19 @@ public abstract class ProcessorBaseConfiguration implements
 	unique = false;
 	use_colors = false;
 
+	score_object = Score.getInstance(Score.Game.ENGLISH_SCRABBLE);
+
     };
 
     // @Deprecated
     // public void setUseLengthSettings(boolean flag) {
     // use_length_settings = flag;
     // }
+
+    @Override
+    public void setGame(Game arg_game) {
+	score_object = Score.getInstance(arg_game);
+    }
 
     /** @inheritDoc */
     @Override

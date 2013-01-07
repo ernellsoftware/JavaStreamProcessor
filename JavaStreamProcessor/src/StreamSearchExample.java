@@ -2,15 +2,13 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 
-import se.ernell.java.streamprocessor.comparators.AlphaDescendingComparator;
 import se.ernell.java.streamprocessor.config.ProcessorConfiguration;
 import se.ernell.java.streamprocessor.filters.FilterBuild;
 import se.ernell.java.streamprocessor.filters.IFilter;
 import se.ernell.java.streamprocessor.io.IStreamObject;
-import se.ernell.java.streamprocessor.objects.Word;
+import se.ernell.java.streamprocessor.objects.Line;
 import se.ernell.java.streamprocessor.processor.BaseProcessor;
 import se.ernell.java.streamprocessor.processor.FilterProcessor;
 import se.ernell.java.streamprocessor.processor.IProcessor;
@@ -108,9 +106,15 @@ public class StreamSearchExample {
 		// zero-size-check
 		if (size > 0) {
 		    for (int i = 0; i < size; i++) {
-			System.out.println("[" + i + "] = '"
-				+ ((Word) BaseProcessor.arraylist.get(i)).line
-				+ "'");
+			System.out
+				.println("["
+					+ i
+					+ "] = '"
+					+ ((Line) BaseProcessor.arraylist
+						.get(i)).line
+					+ "' "
+					+ ((Line) BaseProcessor.arraylist
+						.get(i)).score);
 		    }
 		}
 	    }

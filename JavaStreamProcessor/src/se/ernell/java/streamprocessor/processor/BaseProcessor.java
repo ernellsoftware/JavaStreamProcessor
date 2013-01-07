@@ -20,11 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import se.ernell.java.streamprocessor.Score;
 import se.ernell.java.streamprocessor.config.IProcessorConfiguration;
 import se.ernell.java.streamprocessor.filters.IFilter;
 import se.ernell.java.streamprocessor.io.IStreamObject;
 import se.ernell.java.streamprocessor.io.InputStreamReader;
-import se.ernell.java.streamprocessor.objects.Word;
+import se.ernell.java.streamprocessor.objects.Line;
 
 /**
  * Processor base class
@@ -71,8 +72,29 @@ public abstract class BaseProcessor implements IProcessor,
      */
     @Override
     public void process(char[] line, int line_length) {
-	arraylist.add(Word.create(line, 0, line_length, false));
+	arraylist.add(Line.create(line, getScore(line, line_length),
+		line_length, false));
 	line_counter++;
+
+    }
+
+    private static int getScore(char[] word, int len) {
+	int points = 0;
+	int temp = 0;
+
+	try {
+	    // do loopcount backwards???
+	    for (int i = 0; i < len; i++) {
+		temp = Score.score_table.get(word[i]);
+		if (temp > 0)
+		    points += temp;
+	    }
+
+	} catch (NullPointerException e) {
+	}
+
+	return points;
+
     }
 
     /**
@@ -84,9 +106,6 @@ public abstract class BaseProcessor implements IProcessor,
 	try {
 	    // open stream from URL stored in the IProcessorConfiguration object
 	    final InputStream is = ipc.getStreamURL().openStream();
-	    // final InputStreamReader.InputStreamReaderAction isr = new
-	    // InputStreamReader.InputStreamReaderAction(
-	    // this);
 	    final InputStreamReader isr = new InputStreamReader(this);
 	    isr.setRestrictedMinLength(ipc.getMinLength());
 	    isr.setRestrictedMaxLength(ipc.getMaxLength());
@@ -95,7 +114,6 @@ public abstract class BaseProcessor implements IProcessor,
 	    is.close();
 	    return true;
 	} catch (IOException e) {
-	    // System.out.println("IOException!");
 	    e.printStackTrace();
 	    return false;
 	}

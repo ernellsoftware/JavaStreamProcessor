@@ -17,10 +17,18 @@ package se.ernell.java.streamprocessor.config;
  */
 import java.net.URL;
 
+import se.ernell.java.streamprocessor.Score;
+
 public interface IProcessorConfiguration {
 
     /** Set default values for the configuration */
+    // public Score getScoreMap();
+
+    /** Set default values for the configuration */
     public void setDefaults();
+
+    /** Set a wordgame for score calculation (Score.Game.<GAME>) */
+    public void setGame(Score.Game arg_game);
 
     /** return the URL of the stream */
     public URL getStreamURL();
