@@ -1,11 +1,11 @@
 # Java Stream Processor
-## A stream reader with filter options
+## A stream reader with filter options primarily designed to search for words in dictionary files.
 
 ### package se.ernell.java.streamprocessor
-Read a stream with an highly speed optimized reader and apply 
-multiple search filters like 'begins with', 'ends with', 'contains' 
-and some anagramming filters. It is designed to search for words in 
-dictionary files.
+Read a stream with an speed optimized reader and apply multiple 
+search filters like 'begins with', 'ends with', 'contains' 
+and some anagramming filters. Also some logics like AND, OR, NOT 
+can be applied when multiple filters are used.
 This library will be a part of my Android app 'Wordlist Pro' that 
 can be found on Google Play <a target="_blank" href="http://play.google.com/store/apps/details?id=com.ernell.wordpro">link</a><br>
 The current version is very speedy, but the code looks like shit.
