@@ -37,9 +37,9 @@ public final class FilterProcessor extends BaseProcessor {
     protected int filters_count;
 
     /** Constructor */
-    public FilterProcessor(IProcessorConfiguration ipc,
+    public FilterProcessor(IProcessorConfiguration arg_ipc,
 	    ArrayList<IStreamObject> arg_list) {
-	super(ipc, arg_list);
+	super(arg_ipc, arg_list);
 
 	// init filter array and set the size
 	filters = new ArrayList<IFilter>();
@@ -47,7 +47,7 @@ public final class FilterProcessor extends BaseProcessor {
 
     }
 
-    /** add a filter to the filterlist */
+    /** @inheritDoc */
     @Override
     public void addFilter(IFilter arg_filter) {
 	filters.add(arg_filter);
@@ -69,9 +69,22 @@ public final class FilterProcessor extends BaseProcessor {
 
 	    match = true;
 	    for (int i = 0; i < filters_count; i++) {
-		if (!filters.get(i).match(line, line_length)) {
-		    match = false;
+
+		// process logics
+		if (filters.get(i).getLogic() == Logic.AND) {
+
+		    // find if last
+		    if (i + 1 < filters_count) {
+
+		    }
+
 		}
+
+		// original
+		// if (!filters.get(i).match(line, line_length)) {
+		// match = false;
+		// }
+
 	    }
 
 	}

@@ -1,5 +1,7 @@
 package se.ernell.java.streamprocessor.filters;
 
+import se.ernell.java.streamprocessor.processor.Logic;
+
 /*
  * Copyright (C) 2013 Robert Andersson <http://www.ernell.se>
  *
@@ -27,5 +29,15 @@ public interface IFilter {
 
     /** Matching function */
     public boolean match(char[] line, int line_length);
+
+    /**
+     * Set the logical function of a filter.<br>
+     * When using logical NOT, it is valid for the filter it is set to.<br>
+     * 
+     * */
+    public void setLogic(Logic arg_logic);
+
+    /** get logic operator for this filter */
+    public Logic getLogic();
 
 }

@@ -27,9 +27,10 @@ import se.ernell.java.streamprocessor.filters.IFilter;
  */
 public interface IProcessor {
 
-    /** method to add a custom filter. used by extended classes */
+    /** method to add a custom filter */
     public void addFilter(IFilter arg_filter);
 
+    /** start the processor */
     public boolean start();
 
 }

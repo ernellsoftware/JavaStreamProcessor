@@ -23,4 +23,14 @@ package se.ernell.java.streamprocessor.io;
  */
 public interface IStreamObject {
 
+    public IStreamObject getItem();
+
+    public String getLine();
+
+    public int getLength();
+
+    public int[] getWovCons();
+
+    public int getScore();
+
 }

@@ -21,6 +21,9 @@ import se.ernell.java.streamprocessor.utils.WordUtilities;
 
 public class Line implements IStreamObject {
 
+    /** string representing the html version of the line */
+    public String html_line;
+
     /** string representing a line */
     public final String line;
 
@@ -104,10 +107,12 @@ public class Line implements IStreamObject {
 	vowcons = WordUtilities.getVowCons(arg_word);
     }
 
+    @Override
     public int[] getWovCons() {
 	return vowcons;
     }
 
+    @Override
     public int getScore() {
 	return score;
     }
@@ -116,12 +121,48 @@ public class Line implements IStreamObject {
 	return String.valueOf(score);
     }
 
-    public String getWord() {
+    @Override
+    public IStreamObject getItem() {
+	return this;
+    }
+
+    @Override
+    public String getLine() {
 	return line;
     }
 
+    @Override
     public int getLength() {
 	return length;
+    }
+
+    private static String makeColorShiftHtml(char[] arg_line) {
+	StringBuilder sb = new StringBuilder(20);
+
+	for (int i = 0; i < arg_line.length; i++) {
+	    // line.charAt(i);
+	}
+	return "";
+    }
+
+    public String toHTML(int style) {
+
+	switch (style) {
+
+	// case HOOKS
+
+	// case NORMAL
+
+	default:
+	    break;
+	}
+
+	return "";
+    }
+
+    @Override
+    public String toString() {
+	return line;
     }
 
 }

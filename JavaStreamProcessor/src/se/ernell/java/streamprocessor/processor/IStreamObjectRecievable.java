@@ -30,6 +30,14 @@ package se.ernell.java.streamprocessor.processor;
  */
 public interface IStreamObjectRecievable {
 
+    /**
+     * Method that recieves data from an InputStreamReader
+     * 
+     * @param line
+     *            char-data (probably a word)
+     * @param line_length
+     *            length of char-data
+     */
     public void process(char[] line, int line_length);
 
 }

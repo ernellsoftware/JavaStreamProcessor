@@ -2,16 +2,22 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
+import se.ernell.java.streamprocessor.Score;
+import se.ernell.java.streamprocessor.Sync;
+import se.ernell.java.streamprocessor.comparators.ScoreDescendingComparator;
 import se.ernell.java.streamprocessor.config.ProcessorConfiguration;
 import se.ernell.java.streamprocessor.filters.FilterBuild;
+import se.ernell.java.streamprocessor.filters.FilterLength;
 import se.ernell.java.streamprocessor.filters.IFilter;
 import se.ernell.java.streamprocessor.io.IStreamObject;
 import se.ernell.java.streamprocessor.objects.Line;
 import se.ernell.java.streamprocessor.processor.BaseProcessor;
 import se.ernell.java.streamprocessor.processor.FilterProcessor;
 import se.ernell.java.streamprocessor.processor.IProcessor;
+import se.ernell.java.streamprocessor.processor.Logic;
 import se.ernell.java.time.SimpleTimer;
 
 /**
@@ -21,17 +27,20 @@ import se.ernell.java.time.SimpleTimer;
  */
 public class StreamSearchExample {
 
-    private static ArrayList<IStreamObject> myList;
     private static final String TEXT_TESTFILE1 = "twl.utf8.txt";
     private static final String TEXT_TESTFILE2 = "csw.utf8.txt";
+
+    private static ArrayList<IStreamObject> myList;
+    private static Comparator<IStreamObject> comparator;
     private static long totalTime = 0;
-    public static boolean done = false;
 
     public StreamSearchExample() {
 	run();
     }
 
     private void run() {
+
+	Sync.processing_done = false;
 
 	myList = new ArrayList<IStreamObject>(512);
 
@@ -50,11 +59,12 @@ public class StreamSearchExample {
 	    urls[1] = files[1].toURI().toURL();
 
 	    // filter 1
-	    String word1 = "ASSE";
-	    IFilter filter1 = new FilterBuild(word1, word1.length());
+	    IFilter filter1 = new FilterLength(3, 4);
+	    filter1.setLogic(Logic.AND);
 	    // filter 2
-	    // String word2 = "J";
-	    // IFilter filter2 = new FilterContains(word2, word2.length());
+	    String the_word = "JASER??????????";
+	    IFilter filter2 = new FilterBuild(the_word, the_word.length());
+	    filter2.setLogic(Logic.NOT);
 
 	    // File 1 Processor
 	    ProcessorConfiguration ipc0 = new ProcessorConfiguration(urls[0]);
@@ -62,6 +72,8 @@ public class StreamSearchExample {
 	    ipc0.max_length = 16;
 	    ipc0.buffer_size = 16;// max length of lines in this file
 	    ipc0.unique = false;
+	    ipc0.setGame(Score.Game.ENGLISH_WORDFEUD);
+	    // ipc0.setGame(Score.Game.ENGLISH_SCRABBLE);
 
 	    // File 2 Processor
 	    ProcessorConfiguration ipc1 = new ProcessorConfiguration(urls[1]);
@@ -69,31 +81,38 @@ public class StreamSearchExample {
 	    ipc1.max_length = 16;
 	    ipc1.buffer_size = 16;// max length of lines in this file
 	    ipc1.unique = true;
+	    ipc1.setGame(Score.Game.ENGLISH_WORDFEUD);
+	    // ipc1.setGame(Score.Game.ENGLISH_SCRABBLE);
 
 	    // processor
 	    IProcessor[] cpus = new FilterProcessor[2];
 
 	    cpus[0] = new FilterProcessor(ipc0, myList);
 	    cpus[0].addFilter(filter1);
-	    // cpus[0].addFilter(filter2);
+	    cpus[0].addFilter(filter2);
 
 	    cpus[1] = new FilterProcessor(ipc1, myList);
 	    cpus[1].addFilter(filter1);
-	    // cpus[1].addFilter(filter2);
+	    cpus[1].addFilter(filter2);
 
 	    startStreamProcessorThread(cpus, cpus.length
 		    + " files read sequentially.");
 
+	    // Comparator<IStreamObject> comp = new AlphaDescendingComparator();
+	    comparator = new ScoreDescendingComparator();
+	    startSortingThread();
+
 	    // wait for thread to finish
-	    while (!done) {
-		pause(25);
+	    while (!Sync.processing_done) {
+		pause(50);
 	    }
-	    done = false;
 
 	} catch (MalformedURLException e) {
 	    System.out.println("MalformedURLException: " + e.getMessage());
+	    e.printStackTrace();
 	} catch (Exception e) {
 	    System.out.println("Exception: " + e.getMessage());
+	    e.printStackTrace();
 	}
 
 	pause(200);
@@ -115,6 +134,9 @@ public class StreamSearchExample {
 					+ "' "
 					+ ((Line) BaseProcessor.arraylist
 						.get(i)).score);
+			System.out.println("[" + i + "] = '"
+				+ ((Line) myList.get(i)).line + "' "
+				+ ((Line) myList.get(i)).score);
 		    }
 		}
 	    }
@@ -146,7 +168,64 @@ public class StreamSearchExample {
 		}
 		time.stop(name);
 		totalTime += time.getTime();
-		done = true;
+		Sync.processing_done = true;
+	    }
+	}).start();
+
+    }
+
+    /** Start the Sorting mechanism as a thread */
+    public void startSortingThread() {
+
+	new Thread(new Runnable() {
+	    @Override
+	    public void run() {
+
+		while (!Sync.processing_done) {
+		    pause(50);
+		    synchronized (Sync.lock) {
+			if (myList.size() > 0) {
+			    Collections.sort(myList, comparator);
+			}
+		    }
+		}
+
+		pause(100);
+		System.out.println("Sorting finished");
+
+	    }
+	}).start();
+
+    }
+
+    /**
+     * Start the Sorting mechanism as a thread. Comparator as argument
+     */
+    public void startSortingThread(
+	    final Comparator<IStreamObject> arg_comparator) {
+
+	new Thread(new Runnable() {
+	    @Override
+	    public void run() {
+		/** run as long as processing is running */
+		while (!Sync.processing_done) {
+		    pause(50);
+		    synchronized (Sync.lock) {
+			if (myList.size() > 0) {
+			    Collections.sort(myList, arg_comparator);
+			}
+		    }
+		}
+
+		/** do a last sort just to make sure */
+		pause(50);
+		synchronized (Sync.lock) {
+		    if (myList.size() > 0) {
+			Collections.sort(myList, arg_comparator);
+		    }
+		}
+		System.out.println("Sorting finished");
+
 	    }
 	}).start();
 

@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import se.ernell.java.streamprocessor.Score;
+import se.ernell.java.streamprocessor.Sync;
 import se.ernell.java.streamprocessor.config.IProcessorConfiguration;
 import se.ernell.java.streamprocessor.filters.IFilter;
 import se.ernell.java.streamprocessor.io.IStreamObject;
@@ -53,48 +54,26 @@ public abstract class BaseProcessor implements IProcessor,
 	ipc = arg_ipc;
 	arraylist = arg_list;
 
+	// error check
 	if (ipc == null)
-	    System.out.println("ERROR!");
+	    System.out.println("ERROR! ipc==null");
 	if (arraylist == null)
-	    System.out.println("ERROR!");
+	    System.out.println("ERROR! arrayList==null");
 
     }
 
+    /** @inheritDoc */
     @Override
     public abstract void addFilter(IFilter arg_filter);
 
-    /**
-     * @inheritDoc
-     * 
-     *             Call this method ( super.process(...) ) from the extended
-     *             class if line is to be added to the list of found lines,
-     *             otherwise just 'return'
-     */
+    /** @inheritDoc */
     @Override
     public void process(char[] line, int line_length) {
-	arraylist.add(Line.create(line, getScore(line, line_length),
-		line_length, false));
-	line_counter++;
-
-    }
-
-    private static int getScore(char[] word, int len) {
-	int points = 0;
-	int temp = 0;
-
-	try {
-	    // do loopcount backwards???
-	    for (int i = 0; i < len; i++) {
-		temp = Score.score_table.get(word[i]);
-		if (temp > 0)
-		    points += temp;
-	    }
-
-	} catch (NullPointerException e) {
+	synchronized (Sync.lock) {
+	    arraylist.add(Line.create(line, Score.getScore(line, line_length),
+		    line_length, false));
+	    line_counter++;
 	}
-
-	return points;
-
     }
 
     /**
@@ -109,7 +88,7 @@ public abstract class BaseProcessor implements IProcessor,
 	    final InputStreamReader isr = new InputStreamReader(this);
 	    isr.setRestrictedMinLength(ipc.getMinLength());
 	    isr.setRestrictedMaxLength(ipc.getMaxLength());
-	    isr.readLinesFromStream(is, ipc.getCharBufferSize(),
+	    InputStreamReader.readLinesFromStream(is, ipc.getCharBufferSize(),
 		    ipc.getBufferSize());
 	    is.close();
 	    return true;
@@ -138,7 +117,7 @@ public abstract class BaseProcessor implements IProcessor,
 	try {
 	    Thread.sleep(len);
 	} catch (InterruptedException e) {
-
+	    e.printStackTrace();
 	}
     }
 

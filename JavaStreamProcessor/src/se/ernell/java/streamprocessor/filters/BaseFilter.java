@@ -16,6 +16,7 @@ package se.ernell.java.streamprocessor.filters;
  * limitations under the License.
  */
 import se.ernell.java.Alpha;
+import se.ernell.java.streamprocessor.processor.Logic;
 import se.ernell.java.streamprocessor.utils.FilterUtilities;
 
 /**
@@ -49,6 +50,9 @@ public abstract class BaseFilter implements IFilter {
     /** number of wildcards '*' */
     protected int wildcards;
 
+    /** the logic to use for this filter together with the following filter */
+    protected Logic logic;
+
     /** Constructor */
     public BaseFilter(String arg_pattern, int arg_length) {
 
@@ -66,11 +70,24 @@ public abstract class BaseFilter implements IFilter {
 
 	blanks = FilterUtilities.countChar(arg_pattern, '?');
 	wildcards = FilterUtilities.countChar(arg_pattern, '*');
+	logic = Logic.NONE;
 
     }
 
     /** @inheritDoc */
     @Override
     public abstract boolean match(char[] line, int line_length);
+
+    /** @inheritDoc */
+    @Override
+    public void setLogic(Logic arg_logic) {
+	logic = arg_logic;
+    }
+
+    /** @inheritDoc */
+    @Override
+    public Logic getLogic() {
+	return logic;
+    }
 
 }

@@ -65,8 +65,8 @@ public abstract class ProcessorBaseConfiguration implements
     public boolean font_case;
 
     /** Type of wordgame ( Score.Game.<GAME> ) */
-    public Score.Game game;
-    public static Score score_object;
+    // public Score.Game game;
+    // public static Score score_object;
 
     /** Constructor */
     public ProcessorBaseConfiguration(URL arg_url) {
@@ -90,7 +90,7 @@ public abstract class ProcessorBaseConfiguration implements
 	unique = false;
 	use_colors = false;
 
-	score_object = Score.getInstance(Score.Game.ENGLISH_SCRABBLE);
+	// Score.setScoreTable(Score.Game.ENGLISH_SCRABBLE);
 
     };
 
@@ -101,7 +101,7 @@ public abstract class ProcessorBaseConfiguration implements
 
     @Override
     public void setGame(Game arg_game) {
-	score_object = Score.getInstance(arg_game);
+	Score.setScoreTable(arg_game);
     }
 
     /** @inheritDoc */
@@ -182,6 +182,7 @@ public abstract class ProcessorBaseConfiguration implements
 	    return new_url;
 	} catch (MalformedURLException e) {
 	    System.out.println("MalformedURLException: " + e.getMessage());
+	    e.printStackTrace();
 	}
 	return null;
     }
