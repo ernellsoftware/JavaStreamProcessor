@@ -59,25 +59,4 @@ public class ExampleRunner {
 	System.out.println("Test HTTP URL finished.");
 
     }
-
-    /**
-     * Example use of Temperature Library
-     */
-    /*
-     * public static void example_temperature() { Temperature t1 =
-     * Temperature.fromCelsius(-273.15); Temperature t2 =
-     * Temperature.fromKelvin(0.0); System.out.println("Kelvin degrees    : " +
-     * t1.toKelvin() + "\n" + "Celsius degrees   : " + t1.toCelsius() + "\n" +
-     * "Delisle degrees   : " + t1.toDelisle() + "\n" + "Newton degrees    : " +
-     * t1.toNewton() + "\n" + "Rankine degrees   : " + t1.toRankine() + "\n" +
-     * "Reaumur degrees   : " + t1.toReaumur() + "\n" + "Fahrenheit degrees: " +
-     * t1.toFahrenheit() + "\n" + "Romer degrees     : " + t1.toRomer() + "\n");
-     * System.out.println("Kelvin degrees    : " + t2.toKelvin() + "\n" +
-     * "Celsius degrees   : " + t2.toCelsius() + "\n" + "Delisle degrees   : " +
-     * t2.toDelisle() + "\n" + "Newton degrees    : " + t2.toNewton() + "\n" +
-     * "Rankine degrees   : " + t2.toRankine() + "\n" + "Reaumur degrees   : " +
-     * t2.toReaumur() + "\n" + "Fahrenheit degrees: " + t2.toFahrenheit() + "\n"
-     * + "Romer degrees     : " + t2.toRomer() + "\n"); }
-     */
-
 }
